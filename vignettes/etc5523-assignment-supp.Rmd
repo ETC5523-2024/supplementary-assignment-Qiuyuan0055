@@ -1,0 +1,19 @@
+---
+title: "etc5523-assignment-supp"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{etc5523-assignment-supp}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(etc5523-assignment-supp)
+```
