@@ -17,3 +17,48 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(etc5523-assignment-supp)
 ```
+
+
+```{r}
+install.packages(c("rmarkdown", "knitr", "dplyr", "ggplot2", "readr"))
+```
+
+```{r}
+# Introduction
+This vignette demonstrates how to analyze U.S. Customs and Border Protection (CBP) data, focusing on trends in border encounters by fiscal year, demographic, and citizenship. The goal is to provide insights into the data using summary statistics and visualizations.
+```
+
+```{r}
+# Load data
+cbp_resp <- read_csv("/Users/murphy./Desktop/supplementary-assignment-Qiuyuan0055/data/cbp_resp.rda")
+cbp_state <- read_csv("/Users/murphy./Desktop/supplementary-assignment-Qiuyuan0055/data/cbp_state.rda")
+```
+
+```{r}
+# Preview datasets
+head(cbp_resp)
+head(cbp_state)
+
+# Summary of data
+summary(cbp_resp)
+```
+
+```{r}
+# Summarize data by fiscal year and demographic
+summary_data <- cbp_resp %>%
+  group_by(fiscal_year, demographic) %>%
+  summarise(total_encounters = sum(encounter_count, na.rm = TRUE)) %>%
+  arrange(desc(total_encounters))
+
+# Plot data
+ggplot(summary_data, aes(x = fiscal_year, y = total_encounters, fill = demographic)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(
+    title = "Border Encounters by Fiscal Year and Demographic",
+    x = "Fiscal Year",
+    y = "Total Encounters",
+    fill = "Demographic"
+  )
+```
+

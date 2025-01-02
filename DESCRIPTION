@@ -1,9 +1,9 @@
 Package: etc5523-assignment-supp
-Title: Data and Dashboard for ETC5523 Supplementary Assessment
+Title: A package for analyzing U.S. Customs and Border Protection encounter data
 Version: 0.0.0.9000
 Authors@R: 
-    person("Michael", "Lydeamore", , "michael.lydeamore@monash.edu", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+    person("Qiuyuan", "Chen", , "qche0055@student.monash.edu", role = c("aut", "cre"))
+Description: The package includes a data - cleaning script which utilizes functions from the tidyverse and janitor libraries. This script helps in preparing the raw data for analysis by cleaning and transforming the data columns, ensuring the data is in a suitable format for further statistical analysis and visualization.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
