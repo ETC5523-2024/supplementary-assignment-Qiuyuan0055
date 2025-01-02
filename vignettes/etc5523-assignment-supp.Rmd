@@ -1,5 +1,5 @@
 ---
-title: "etc5523-assignment-supp"
+title: "CBP Data Analysis"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{etc5523-assignment-supp}
@@ -15,7 +15,8 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(etc5523-assignment-supp)
+library(dplyr)
+library(ggplot2)
 ```
 
 
@@ -23,10 +24,16 @@ library(etc5523-assignment-supp)
 install.packages(c("rmarkdown", "knitr", "dplyr", "ggplot2", "readr"))
 ```
 
-```{r}
+
 # Introduction
-This vignette demonstrates how to analyze U.S. Customs and Border Protection (CBP) data, focusing on trends in border encounters by fiscal year, demographic, and citizenship. The goal is to provide insights into the data using summary statistics and visualizations.
-```
+This vignette analyzes U.S. Customs and Border Protection (CBP) data to explore trends in border encounters by fiscal year and demographic characteristics. The focus is on identifying patterns in encounter counts over time and across regions.
+
+# Methods
+To understand US Customs and Border Protection (CBP) encounter data, we utilized two core datasets, cbp_resp and cbp_state. The cbp_resp dataset details encounters with different demographics in each fiscal year, while the cbp_state dataset aggregates the total number of encounters by state. These two data sets provide a wealth of information for analysis, helping to reveal key temporal trends and geographic distribution patterns.
+
+First, we loaded the data and conducted an exploratory analysis of its contents, checking the data for completeness and accuracy. Next, we completed the following work in the data preprocessing stage: Grouping cbp_resp data by fiscal year and demographic characteristics, and calculating the total number of encounters for each group; The cbp_state data were grouped by state to calculate the total number of encounters in each state. In addition, we ensure the reliability of statistical results by removing missing values (na.rm = TRUE) during calculation.
+
+To make the data more intuitive, we designed two visualizations: The first is a bar chart that shows encounter trends by fiscal year and demographic characteristics; The second is a horizontal bar chart that compares the total number of encounters by state. These charts clearly show the distribution patterns of time and space and provide strong support for the analysis.
 
 ```{r}
 # Load data
@@ -61,4 +68,59 @@ ggplot(summary_data, aes(x = fiscal_year, y = total_encounters, fill = demograph
     fill = "Demographic"
   )
 ```
+# Results
+# Overall Trends by Fiscal Year
+General Trends: Annual changes in border encounters
 
+Analysis of cbp_resp data reveals significant changes in the total number of border encounters between fiscal years, as well as trends in the distribution of encounters across different demographic characteristics. Specifically, the overall number of encounters increased significantly in some fiscal years, a phenomenon that could be related to policy changes or global migration trends. For example, in some years, the number of encounters with unaccompanied children (UC) has risen rapidly, indicating the particular vulnerability of this group in particular policy contexts. At the same time, the number of recorded encounters of family unit members (FMUA) and adults (single persons) is relatively stable, making up the majority of border encounters.
+
+We can see these trends intuitively by looking at the bar chart. The data showed that the number of encounters with unaccompanied children increased rapidly in a given year, while the trend for family unit members was more flat. These changes can be influenced by a number of factors, such as changes in border enforcement policies or seasonal changes in migration flows.
+```{r}
+# Plot total encounters by fiscal year and demographic
+ggplot(summary_data, aes(x = fiscal_year, y = total_encounters, fill = demographic)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  theme_minimal() +
+  labs(
+    title = "Border Encounters by Fiscal Year and Demographic",
+    x = "Fiscal Year",
+    y = "Total Encounters",
+    fill = "Demographic"
+  )
+```
+#Encounter Counts by State
+State distribution: Ranking of border encounters by state
+
+In the analysis of cbp_state data, we found significant regional differences in the geographical distribution of border encounters. Texas' total number of encounters was much higher than other states, showing its importance as a major border state. This phenomenon may be driven by its long border with Mexico and the concentration of its migrant flows. In addition, California and Arizona also occupy high positions in the total number of encounters, further demonstrating the central role of southern border states in immigration management.
+
+On the other hand, some non-border states also show a higher record of encounters. These states may host significant immigration detention facilities or receive large numbers of migrants transferred from border states. This phenomenon reflects the fact that the management of migration is not only a problem in border areas, but also involves the coordination and implementation of policies within countries more broadly.
+
+The horizontal bar chart clearly shows the number of encounters by state. As you can see from the chart, Texas ranks first by a wide margin, while other southern border states are close behind. These data provide valuable insights into the geographical distribution of migration flows and provide a basis for studying the migration management needs of different states.
+```{r}
+# Summarize total encounters by state
+state_summary <- cbp_state %>%
+  group_by(state) %>%
+  summarise(total_encounters = sum(encounter_count, na.rm = TRUE)) %>%
+  arrange(desc(total_encounters))
+```
+
+
+```{r}
+# Plot total encounters by state
+ggplot(state_summary, aes(x = reorder(state, -total_encounters), y = total_encounters)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    title = "Total Encounters by State",
+    x = "State",
+    y = "Total Encounters"
+  )
+```
+```{r}
+print(state_summary)
+```
+Through this analysis, we found that the border encounter data contains multiple layers of information, revealing important temporal and spatial trends. In a time dimension, the total number of border encounters has increased significantly in some years, possibly due to a combination of immigration policy changes and the global migration crisis. For example, the rapid increase in the number of unaccompanied children suggests that this group may be more sensitive to policy adjustments and changes in the external environment. Family unit members and adults make up the bulk of the total number of encounters, reflecting broader migration dynamics.
+
+From the perspective of spatial distribution, the southern border states occupy a dominant position in border management. Texas has not only experienced the largest number of people, it is also likely to be a major conduit for the flow of migrants. Other southern states, such as California and Arizona, similarly feature heavily in the total. In addition, the high number of encounters in non-border states also shows that the impact of immigration management extends far beyond the border region to involve the coordination of immigration policy throughout the country.
+
+Based on these findings, future research could further explore the specific effects of immigration policy, for example by analyzing the impact of policy changes on a particular demographic characteristic, or studying seasonal patterns of border encounters. In addition, the use of machine learning methods to predict future migration trends will also be an important direction. These studies can not only inform policy formulation, but also help optimize existing immigration management frameworks.
