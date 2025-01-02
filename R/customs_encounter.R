@@ -1,15 +1,26 @@
-#' @description CBP response data
-#' @format A data frame with (68815)rows and (12)columns
-#' @source https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024 - 11 - 26/cbp_resp.csv
-#' @examples
-#' data(cbp_resp)
-#' head(cbp_resp)
+#' CBP Response Data
+#'
+#' This dataset contains information about border encounters, categorized by fiscal year, demographics, and other attributes.
+#'
+#' @format A data frame with columns:
+#' \describe{
+#'   \item{fiscal_year}{Fiscal year of the encounters.}
+#'   \item{demographic}{Demographic group of the encounters (e.g., "Unaccompanied Children").}
+#'   \item{encounter_count}{Number of encounters recorded.}
+#' }
+#' @source CBP public data
+#' @name cbp_resp
 "cbp_resp"
 
-#' @description CBP state data
-#' @format A data frame with (54939)rows and (9) columns
-#' @source https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024 - 11 - 26/cbp_state.csv
-#' @examples
-#' data(cbp_state)
-#' head(cbp_state)
+#' CBP State Data
+#'
+#' This dataset provides state-level summaries of CBP encounters.
+#'
+#' @format A data frame with columns:
+#' \describe{
+#'   \item{state}{State where encounters occurred.}
+#'   \item{encounter_count}{Total number of encounters in the state.}
+#' }
+#' @source CBP public data
+#' @name cbp_state
 "cbp_state"

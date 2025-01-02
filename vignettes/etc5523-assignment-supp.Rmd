@@ -2,7 +2,7 @@
 title: "CBP Data Analysis"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{etc5523-assignment-supp}
+  %\VignetteIndexEntry{CBP Data Analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,6 +17,11 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(dplyr)
 library(ggplot2)
+library(tidyverse)
+```
+
+```{r}
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
 ```
 
 
@@ -37,8 +42,8 @@ To make the data more intuitive, we designed two visualizations: The first is a 
 
 ```{r}
 # Load data
-cbp_resp <- read_csv("/Users/murphy./Desktop/supplementary-assignment-Qiuyuan0055/data/cbp_resp.rda")
-cbp_state <- read_csv("/Users/murphy./Desktop/supplementary-assignment-Qiuyuan0055/data/cbp_state.rda")
+cbp_resp <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-11-26/cbp_resp.csv')
+cbp_state <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-11-26/cbp_state.csv')
 ```
 
 ```{r}
