@@ -30,7 +30,7 @@ remotes::install_github("ETC5523-2024/supplementary-assignment-Qiuyuan0055")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows how to solve a common problem:
 Example: Exploring Trends in Border Encounters by Demographic
 ```{r example}
 library(cbp.analysis)
@@ -83,3 +83,4 @@ ggplot(uc_summary, aes(x = fiscal_year, y = total_encounters)) +
 1.This example solves a common problem: how to analyze annual trends by specific demographic categories.
 2. The data were filtered and summarized through filter and group_by, clearly showing the changing trend of the target population.
 3. The generated graph shows the total number of encounters per fiscal year, and users can further infer trends and potential causes based on the data.
+For more details about the package, please visit[here](https://etc5523-2024.github.io/supplementary-assignment-Qiuyuan0055/) 

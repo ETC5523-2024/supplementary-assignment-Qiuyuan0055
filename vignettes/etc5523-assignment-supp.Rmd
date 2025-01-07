@@ -73,7 +73,9 @@ ggplot(summary_data, aes(x = fiscal_year, y = total_encounters, fill = demograph
     fill = "Demographic"
   )
 ```
+
 # Results
+
 # Overall Trends by Fiscal Year
 General Trends: Annual changes in border encounters
 
@@ -92,7 +94,7 @@ ggplot(summary_data, aes(x = fiscal_year, y = total_encounters, fill = demograph
     fill = "Demographic"
   )
 ```
-#Encounter Counts by State
+# Encounter Counts by State
 State distribution: Ranking of border encounters by state
 
 In the analysis of cbp_state data, we found significant regional differences in the geographical distribution of border encounters. Texas' total number of encounters was much higher than other states, showing its importance as a major border state. This phenomenon may be driven by its long border with Mexico and the concentration of its migrant flows. In addition, California and Arizona also occupy high positions in the total number of encounters, further demonstrating the central role of southern border states in immigration management.

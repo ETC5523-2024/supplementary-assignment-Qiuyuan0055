@@ -95,4 +95,6 @@ specific demographic categories. 2. The data were filtered and
 summarized through filter and group_by, clearly showing the changing
 trend of the target population. 3. The generated graph shows the total
 number of encounters per fiscal year, and users can further infer trends
-and potential causes based on the data.
+and potential causes based on the data. For more details about the
+package, please
+visit[here](https://etc5523-2024.github.io/supplementary-assignment-Qiuyuan0055/)
