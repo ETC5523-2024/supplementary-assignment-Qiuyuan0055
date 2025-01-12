@@ -29,7 +29,6 @@ ui <- fluidPage(
     ),
 
     mainPanel(
-      # Output: Trend plot
       tabsetPanel(
         tabPanel("Trend Analysis", plotOutput("trendPlot")),
         tabPanel("State Analysis", plotOutput("statePlot"))

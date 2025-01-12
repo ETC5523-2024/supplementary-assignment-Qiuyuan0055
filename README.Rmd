@@ -31,27 +31,18 @@ remotes::install_github("ETC5523-2024/supplementary-assignment-Qiuyuan0055")
 ## Example
 
 This is a basic example which shows how to solve a common problem:
-Example: Exploring Trends in Border Encounters by Demographic
-```{r example}
-library(cbp.analysis)
-# Load the package
-library(cbp.analysis)
 
-# Load the dataset
-data("cbp_resp", package = "cbp.analysis")
-
-# Filter data for "Unaccompanied Children"
-uc_data <- cbp_resp[cbp_resp$demographic == "Unaccompanied Children", ]
-
-# Summarize total encounters by fiscal year
-library(dplyr)
-uc_summary <- uc_data %>%
+Example 1: Trends in Encounters for Unaccompanied Children
+```{r}
+# Filter and summarize data by fiscal year for "Unaccompanied Children"
+uc_trends <- cbp_resp %>%
+  filter(demographic == "Unaccompanied Children") %>%
   group_by(fiscal_year) %>%
-  summarise(total_encounters = sum(encounter_count, na.rm = TRUE))
+  summarise(total_encounters = sum(encounter_count, na.rm = TRUE)) %>%
+  ungroup()
 
-# Visualize the trend
-library(ggplot2)
-ggplot(uc_summary, aes(x = fiscal_year, y = total_encounters)) +
+# Plot trends for Unaccompanied Children
+ggplot(uc_trends, aes(x = fiscal_year, y = total_encounters)) +
   geom_line(color = "blue", size = 1) +
   geom_point(size = 2) +
   theme_minimal() +
@@ -59,28 +50,106 @@ ggplot(uc_summary, aes(x = fiscal_year, y = total_encounters)) +
     title = "Trends in Encounters for Unaccompanied Children",
     x = "Fiscal Year",
     y = "Total Encounters"
-  )
+  ) +
+  scale_x_continuous(breaks = seq(min(uc_trends$fiscal_year), max(uc_trends$fiscal_year), by = 1))
+
 ```
+ Example 2: Top States by Total Encounters
+```{r}
+# Summarize data by state
+state_summary <- cbp_state %>%
+  group_by(state) %>%
+  summarise(total_encounters = sum(encounter_count, na.rm = TRUE)) %>%
+  arrange(desc(total_encounters))
+
+# Plot top 10 states
+top_states <- state_summary %>%
+  slice_head(n = 10)
+
+ggplot(top_states, aes(x = reorder(state, total_encounters), y = total_encounters)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    title = "Top 10 States by Total CBP Encounters",
+    x = "State",
+    y = "Total Encounters"
+  ) +
+  scale_y_continuous(labels = scales::comma)
+```
+
 # Result
 ```{r}
-data("cbp_resp", package = "cbp.analysis")
-uc_data <- cbp_resp[cbp_resp$demographic == "Unaccompanied Children", ]
+# Example 1: Trends in Encounters for Unaccompanied Children
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+library(scales)
 
-uc_summary <- uc_data %>%
+# Ensure fiscal_year is numeric and remove missing values
+cbp_resp <- cbp_resp %>%
+  mutate(fiscal_year = as.numeric(fiscal_year)) %>%
+  filter(!is.na(fiscal_year))
+
+# Summarize encounters for "Unaccompanied Children" by fiscal year
+uc_data <- cbp_resp %>%
+  filter(demographic == "Unaccompanied Children") %>%
   group_by(fiscal_year) %>%
-  summarise(total_encounters = sum(encounter_count, na.rm = TRUE))
+  summarise(total_encounters = sum(encounter_count, na.rm = TRUE)) %>%
+  ungroup()
 
-ggplot(uc_summary, aes(x = fiscal_year, y = total_encounters)) +
-  geom_line(color = "blue", size = 1) +
-  geom_point(size = 2) +
-  theme_minimal() +
-  labs(
-    title = "Trends in Encounters for Unaccompanied Children",
-    x = "Fiscal Year",
-    y = "Total Encounters"
-  )
+# Check if uc_data contains valid data
+if (nrow(uc_data) > 0 && all(is.finite(uc_data$fiscal_year))) {
+  # Plot the trend
+  ggplot(uc_data, aes(x = fiscal_year, y = total_encounters)) +
+    geom_line(color = "blue", size = 1) +
+    geom_point(size = 2) +
+    theme_minimal() +
+    labs(
+      title = "Trends in Encounters for Unaccompanied Children",
+      x = "Fiscal Year",
+      y = "Total Encounters"
+    ) +
+    scale_x_continuous(breaks = seq(min(uc_data$fiscal_year, na.rm = TRUE), 
+                                    max(uc_data$fiscal_year, na.rm = TRUE), by = 1)) +
+    scale_y_continuous(labels = comma)
+} else {
+  message("No valid data available for 'Unaccompanied Children'.")
+}
+
+# Example 2: Top 10 States by Total Encounters
+# Ensure state column is valid and remove missing values
+cbp_state <- cbp_state %>%
+  filter(!is.na(state))
+
+# Summarize total encounters by state
+state_data <- cbp_state %>%
+  group_by(state) %>%
+  summarise(total_encounters = sum(encounter_count, na.rm = TRUE)) %>%
+  arrange(desc(total_encounters))
+
+# Select top 10 states
+top_10_states <- state_data %>%
+  slice_head(n = 10)
+
+# Check if top_10_states contains valid data
+if (nrow(top_10_states) > 0) {
+  # Plot the top states
+  ggplot(top_10_states, aes(x = reorder(state, total_encounters), y = total_encounters)) +
+    geom_bar(stat = "identity", fill = "steelblue") +
+    coord_flip() +
+    theme_minimal() +
+    labs(
+      title = "Top 10 States by Total CBP Encounters",
+      x = "State",
+      y = "Total Encounters"
+    ) +
+    scale_y_continuous(labels = comma)
+} else {
+  message("No valid data available for state-level analysis.")
+}
 ```
-1.This example solves a common problem: how to analyze annual trends by specific demographic categories.
-2. The data were filtered and summarized through filter and group_by, clearly showing the changing trend of the target population.
-3. The generated graph shows the total number of encounters per fiscal year, and users can further infer trends and potential causes based on the data.
+	1.	This example addresses a typical analytical challenge: examining annual trends within specific demographic groups.
+	2.	The dataset was processed by filtering for the target demographic and aggregating the data by fiscal year using filter and group_by. This approach effectively highlights the yearly variations in the selected population.
+	3.	The resulting visualization illustrates the total number of encounters per fiscal year, enabling users to identify patterns over time and explore potential factors driving these trends.
 For more details about the package, please visit[here](https://etc5523-2024.github.io/supplementary-assignment-Qiuyuan0055/) 
