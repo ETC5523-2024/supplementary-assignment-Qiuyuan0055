@@ -39,12 +39,29 @@ ui <- fluidPage(
 
 # Define server logic
 server <- function(input, output) {
+
+  ## Set up dynamic dataset based on the inputs
+  uc_trends <- reactive({
+    cbp_resp %>%
+      # Filter column 'demographic' based on the what is chosen in the inputId demo
+    filter(demographic == input$demo) %>%
+    group_by(fiscal_year) %>%
+    summarise(total_encounters = sum(encounter_count, na.rm = TRUE)) %>%
+    ungroup()
+  })
+
   output$trendPlot <- renderPlot({
     # Placeholder plot for trends
-    plot(1:10, 1:10, type = "b", col = "blue",
-         main = paste("Trend for:", input$demo),
-         xlab = "Year",
-         ylab = "Encounters")
+    ggplot(uc_trends(), aes(x = fiscal_year, y = total_encounters)) +
+      geom_line(color = "blue", size = 1) +
+      geom_point(size = 2) +
+      theme_minimal() +
+      labs(
+        title = "Trends in Encounters for Unaccompanied Children",
+        x = "Fiscal Year",
+        y = "Total Encounters"
+      ) +
+      scale_x_continuous(breaks = seq(min(uc_trends()$fiscal_year), max(uc_trends()$fiscal_year), by = 1))
   })
 
   output$statePlot <- renderPlot({
